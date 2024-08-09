@@ -1,0 +1,37 @@
+---
+- name: execute the base-highstate.sh scrpit
+  hosts: all
+  gather_facts: false
+  become_method: sudo
+  become: yes
+  ignore_errors: true
+  tasks:
+    - name: Copy the scrpit
+      copy:
+         src: /home/khader/base-highstate.sh
+         dest: /home/hpeadm/base-highstate.sh
+         owner: root
+         group: root
+         mode: 0755
+    - name: Execute the script
+      command: /home/hpeadm/base-highstate.sh
+      register: scrpit_output
+    - name: Print scrpit output
+      debug:
+         msg: "{{ scrpit_output.stdout_lines }}"
+
+
+### updating sndisc_password
+
+- name: Updating  the sndisc_s password
+  hosts: all
+  gather_facts: false
+  become_method: sudo
+  become: yes
+  ignore_errors: true
+  tasks:
+    - name: Update the password
+      user:
+        name: sndisc_s
+        password: "$6$0pzDx5gvmPH7yiqW$Ou9jNaajJrZ0Q4t8TSTquQKPYt1c9lV0KPQ3ZRiPi/110r2hnxEu0jQnXNpsh..HDK7lzSfj1Xr1ZzkBKMxPu0"
+

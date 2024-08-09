@@ -1,0 +1,33 @@
+--- 
+- name: To extend the password expiry of the user
+  hosts: all
+  become_method: sudo 
+  become: yes
+  tasks: 
+    - name: Extend the expiry of the user
+      shell: chage -d today {{ item }}
+      with_items:
+        - egsdsftp
+        - egsdmgr
+      register: extended
+    - name: Display extended validity
+      debug:
+        var: extended.stdout_lines
+      with_items: 
+        " {{ extended.results }} "
+- name: Display the Password extended.
+  hosts: all
+  become_method: sudo 
+  become: yes
+  tasks: 
+    - name: Display policy after extennding the user validity
+      command:  chage -l {{ item }}
+      with_items:   
+        - egsdsftp
+        - egsdmgr
+      register: updated_policy
+    - name: Display the updated policy 
+      debug:
+        var: updated_policy.stdout_lines
+      with_items:
+        " {{ updated_policy.results }} "

@@ -1,0 +1,5 @@
+---
+-  name: users that need to renewe he password
+   users:
+     - pdwmgr
+     - pdwsftp

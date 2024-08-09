@@ -1,0 +1,42 @@
+--- 
+- name: Check the memory output 
+  hosts: all
+  become_method: sudo 
+  become: yes
+  gather_facts: false
+  tasks:   
+    - name: running 'free -h' command
+      shell: free -h 
+      register: mem_usage
+    - name: Display memory usage.
+      debug: 
+        var: mem_usage.stdout_lines
+### To check the CPU usage
+
+- name: Check the CPU usage
+  hosts: all
+  become_method: sudo
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Check top process running.
+      shell: "timeout 10 top -b -n 1 | head -8"
+      register: top_process
+    - name: Display the top process
+      debug: 
+        var: top_process.stdout_lines
+###  To check disk utlization.
+
+- name: To check the Disk usage
+  hosts: all
+  become_method: sudo 
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Check the Disk usage
+      command: df -hT
+      register: disk_usage
+    - name: Display the Disk usage
+      debug:
+        var: disk_usage.stdout_lines
+

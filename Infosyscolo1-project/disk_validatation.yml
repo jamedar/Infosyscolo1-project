@@ -1,0 +1,17 @@
+---
+- name: Get the last 10 lines of lsblk output
+  hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: false
+  ignore_errors: true
+  tasks:
+   - name: Gather lsblk output
+     command: lsblk
+     register: lsblk_output
+   - name: Get the last 10 lines of lsblk output
+     shell: echo "{{ lsblk_output.stdout }}" | tail -n 5
+     register: lsblk_last_10_lines
+   - name: Display the last 10 lines of lsblk output
+     debug:
+       msg: "{{ lsblk_last_10_lines.stdout_lines }}"

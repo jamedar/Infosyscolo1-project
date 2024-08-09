@@ -1,0 +1,29 @@
+--- 
+- name : To update the password expiry 
+  hosts: all
+  gather_facts: false
+  become_method: sudo 
+  become: yes
+  vars_files: 
+     - vars.yml
+  tasks:
+     - name: extend the password expiry
+       shell: chage -d today "{{ item }}"
+       register: chage_output 
+       loop: "{{ users }}"
+- name: To check password extended or not
+  hosts: all
+  gather_facts: false
+  become_method: sudo 
+  become: yes
+  ignore_errors: true
+  vars_files:
+     - vars.yml
+  tasks: 
+     - name: To Display updated extend chage output
+       command: chage -l "{{ item }}"
+       register: updated_chage
+     - name: Display ths Chage output
+       debug:
+         msg: "Update chage output {{ item.stdout}}"
+       loop: "{{ updated_chage.results }}"

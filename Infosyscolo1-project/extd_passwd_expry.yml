@@ -1,0 +1,25 @@
+- hosts: all
+  become_method: sudo
+  become: yes 
+  gather_facts: false
+  ignore_errors: yes
+  tasks:  
+   - name : extending the password expiry.
+     shell: chage -d today {{ item }}
+     with_items:
+       - pdwsftp 
+       - pdwmgr
+#      - westcoast
+#      - eaf
+#      - PTAVNET_indo
+#      - express
+#      - SWS_china
+#      - demo_ams
+#      - convenaint
+#     - PARTSAVE_MAL
+     register: passwd_exp_extd
+   - debug: var=passwd_exp_extd.stdout_lines
+   - name: To check update status 
+     shell: chage -l {{ item }}
+     register: updated_status
+   - debug: var=updated_status.stdout_lines
