@@ -1,0 +1,9 @@
+---
+# tasks file for uptime
+
+- name: To check the uptime of the servers
+  command : uptime
+  register: uptime_status 
+- name: To Print the status 
+  debug: 
+    msg: " {{ uptime_status.stdout_lines }} "
